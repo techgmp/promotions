@@ -42,10 +42,13 @@
       border-radius: 8px;
       font-size: 1rem;
       transition: border 0.2s;
+      box-sizing: border-box;
     }
 
     textarea {
-      resize: none; /* ✅ Prevent resizing */
+      overflow: hidden;
+      resize: none;
+      min-height: 100px;
     }
 
     input:focus, textarea:focus {
@@ -104,6 +107,15 @@
 
   <script>
     const form = document.getElementById('myForm');
+    const messageField = form.querySelector('textarea[name="Message"]');
+
+    // ✅ Auto-resize on input
+    messageField.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+    });
+
+    // ✅ Submit to n8n
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
@@ -122,6 +134,7 @@
         if (response.ok) {
           document.getElementById("statusMsg").innerText = "✅ Submitted successfully!";
           form.reset();
+          messageField.style.height = "auto";
         } else {
           document.getElementById("statusMsg").innerText = "❌ Submission failed.";
         }
