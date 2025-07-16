@@ -117,32 +117,37 @@
   <div class="watermark">Georgetown Marketplace</div>
 
   <script>
-  const form = document.getElementById('myForm');
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
+    const form = document.getElementById('myForm');
+    const descriptionField = form.querySelector('textarea[name="Description"]');
 
-    const formData = new FormData(form);
-    const jsonData = Object.fromEntries(formData.entries());
+    // Auto-resize textarea
+    descriptionField.addEventListener('input', function () {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+    });
 
-    try {
-      const response = await fetch("http://localhost:8808/webhook/form-submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(jsonData)
-      });
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-      if (response.ok) {
-        form.reset();
-        document.getElementById("statusMsg").innerText = "✅ Submitted!";
-      } else {
-        document.getElementById("statusMsg").innerText = "❌ Submission failed.";
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("http://localhost:8808/webhook/form-submit", {
+          method: "POST",
+          body: formData
+        });
+
+        if (response.ok) {
+          document.getElementById("statusMsg").innerText = "✅ Submitted successfully!";
+          form.reset();
+          descriptionField.style.height = "auto";
+        } else {
+          document.getElementById("statusMsg").innerText = "❌ Submission failed.";
+        }
+      } catch (error) {
+        document.getElementById("statusMsg").innerText = "❌ Error: " + error.message;
       }
-    } catch (error) {
-      document.getElementById("statusMsg").innerText = "❌ Error: " + error.message;
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
