@@ -59,10 +59,6 @@
       border-color: #0077ff;
     }
 
-    input[type="file"] {
-      padding: 0.5rem;
-    }
-
     button {
       width: 100%;
       padding: 0.75rem;
@@ -107,7 +103,7 @@
       <input type="date" name="StartDate" required>
       <input type="date" name="EndDate" required>
       <textarea name="Description" placeholder="Promotion Details / Message" required></textarea>
-      <input type="file" name="Images" accept="image/*" multiple required>
+      <!-- Removed the image file input -->
       <button type="submit">Submit</button>
     </form>
     <p id="statusMsg"></p>
